@@ -1,0 +1,26 @@
+[tool.poetry]
+name = "ra-aid-start"
+version = "0.1.10"
+description = "Uma ferramenta CLI para configurar e executar presets para o ra-aid."
+authors = ["Roo TaskExecutor <taskexecutor@example.com>"]
+license = "MIT"
+readme = "README.md"
+packages = [{include = "ra_aid_start"}]
+
+[tool.poetry.dependencies]
+python = ">=3.9,<4.0"
+click = "^8.1.7"  # Usar uma versão recente, verificar a última se necessário
+rich = "^13.7.1"   # Usar uma versão recente
+pydantic = "^2.7.1" # Usar uma versão recente, compatível com Python 3.9+
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.2.0"
+pytest-cov = "^5.0.0"
+# Adicionar outras dependências de desenvolvimento se houver, como linters, formatadores
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+ra-aid-start = "ra_aid_start.__main__:main_cli"
