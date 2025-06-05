@@ -1,3 +1,4 @@
+README.md
 setup.py
 ra_aid_start/__main__.py
 ra_aid_start/menus.py

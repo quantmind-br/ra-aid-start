@@ -15,7 +15,7 @@ def _print_menu_footer(menu_width, indent=""):
     """Prints the bottom border of a menu."""
     print(f"{indent}└" + "─" * (menu_width - 2) + "┘")
 
-def _get_user_choice(prompt="Escolha uma opção: ", indent=""):
+def _get_user_choice(prompt="Choose an option: ", indent=""):
     """Gets user input, indented consistently with the menu."""
     return input(f"{indent}{prompt}")
 
@@ -23,10 +23,10 @@ def show_main_menu():
     menu_width = 40
     content_width = menu_width - 4
     
-    _print_menu_header("MENU PRINCIPAL", menu_width, content_width)
-    _print_menu_item("1. Selecionar preset", content_width)
-    _print_menu_item("2. Configurar presets", content_width)
-    _print_menu_item("3. Sair", content_width)
+    _print_menu_header("MAIN MENU", menu_width, content_width)
+    _print_menu_item("1. Select preset", content_width)
+    _print_menu_item("2. Configure presets", content_width)
+    _print_menu_item("3. Exit", content_width)
     _print_menu_footer(menu_width)
     return _get_user_choice()
 
@@ -35,10 +35,10 @@ def show_select_preset_menu():
     menu_width = 60
     content_width = menu_width - 4
 
-    _print_menu_header("SELECIONAR PRESET", menu_width, content_width)
+    _print_menu_header("SELECT PRESET", menu_width, content_width)
 
     if not presets:
-        _print_menu_item("Nenhum preset configurado.", content_width)
+        _print_menu_item("No presets configured.", content_width)
     else:
         for i, (name, cmd) in enumerate(presets.items(), 1):
             max_name_len = 20
@@ -51,24 +51,24 @@ def show_select_preset_menu():
             preset_line = f"{i}. {display_name}: {display_cmd}"
             _print_menu_item(preset_line, content_width)
     
-    _print_menu_item("0. Voltar", content_width)
+    _print_menu_item("0. Back", content_width)
     _print_menu_footer(menu_width)
-    choice = _get_user_choice("Escolha o número do preset: ")
+    choice = _get_user_choice("Choose the preset number: ")
     return choice, list(presets.items())
 
 def show_configure_menu():
     menu_width = 40
     content_width = menu_width - 4
 
-    _print_menu_header("CONFIGURAR PRESETS", menu_width, content_width)
-    _print_menu_item("1. Adicionar novo preset", content_width)
-    _print_menu_item("2. Excluir preset existente", content_width)
-    _print_menu_item("3. Voltar", content_width)
+    _print_menu_header("CONFIGURE PRESETS", menu_width, content_width)
+    _print_menu_item("1. Add new preset", content_width)
+    _print_menu_item("2. Delete existing preset", content_width)
+    _print_menu_item("3. Back", content_width)
     _print_menu_footer(menu_width)
     return _get_user_choice()
 
 def _prompt_enter_to_continue():
-    input("\nPressione Enter para continuar...")
+    input("\nPress Enter to continue...")
 
 def _clear_screen():
     pass
@@ -89,16 +89,16 @@ def main_menu():
                 if 0 <= index < len(presets_list):
                     name, command = presets_list[index]
                     _clear_screen()
-                    print(f"\n🚀 Executando preset '{name}'...")
-                    print(f"   Comando: {command}")
+                    print(f"\n🚀 Running preset '{name}'...")
+                    print(f"   Command: {command}")
                     os.system(command)
-                    print(f"\n✅ Preset '{name}' concluído.")
+                    print(f"\n✅ Preset '{name}' completed.")
                 else:
-                    print("⚠️ Opção inválida.")
+                    print("⚠️ Invalid option.")
             except ValueError:
-                print("⚠️ Entrada inválida. Por favor, insira um número.")
+                print("⚠️ Invalid input. Please enter a number.")
             except IndexError: 
-                print("⚠️ Opção fora do intervalo.")
+                print("⚠️ Option out of range.")
             _prompt_enter_to_continue()
             _clear_screen()
             
@@ -106,46 +106,46 @@ def main_menu():
             config_choice = show_configure_menu()
             _clear_screen()
             if config_choice == "1":
-                print("\n--- Adicionar Novo Preset ---")
-                name = input("Nome do preset: ")
-                command = input("Comando completo: ")
+                print("\n--- Add New Preset ---")
+                name = input("Preset name: ")
+                command = input("Full command: ")
                 if name and command:
                     add_preset(name, command)
-                    print(f"\n✅ Preset '{name}' adicionado!")
+                    print(f"\n✅ Preset '{name}' added!")
                 else:
-                    print("\n⚠️ Nome e comando não podem ser vazios.")
+                    print("\n⚠️ Name and command cannot be empty.")
                 _prompt_enter_to_continue()
                 _clear_screen()
                 
             elif config_choice == "2":
-                print("\n--- Excluir Preset Existente ---")
+                print("\n--- Delete Existing Preset ---")
                 presets = load_presets()
                 if not presets:
-                    print("Nenhum preset para excluir.")
+                    print("No presets to delete.")
                 else:
                     preset_names = list(presets.keys())
                     for idx, p_name in enumerate(preset_names, 1):
                         print(f"{idx}. {p_name}")
-                    print("0. Cancelar")
+                    print("0. Cancel")
                     
                     try:
-                        delete_idx_str = _get_user_choice("Escolha o número do preset para excluir: ")
+                        delete_idx_str = _get_user_choice("Choose the preset number to delete: ")
                         if delete_idx_str == "0":
                             _clear_screen()
                             continue
                         delete_idx = int(delete_idx_str) -1
                         if 0 <= delete_idx < len(preset_names):
                             target_name = preset_names[delete_idx]
-                            confirm = input(f"Tem certeza que deseja excluir o preset '{target_name}'? (s/N): ").strip().lower()
-                            if confirm == 's':
+                            confirm = input(f"Are you sure you want to delete preset '{target_name}'? (y/N): ").strip().lower()
+                            if confirm == 'y':
                                 delete_preset(target_name)
-                                print(f"\n❌ Preset '{target_name}' excluído!")
+                                print(f"\n❌ Preset '{target_name}' deleted!")
                             else:
-                                print("\nExclusão cancelada.")
+                                print("\nDeletion cancelled.")
                         else:
-                            print("⚠️ Número inválido.")
+                            print("⚠️ Invalid number.")
                     except ValueError:
-                        print("⚠️ Entrada inválida. Por favor, insira um número.")
+                        print("⚠️ Invalid input. Please enter a number.")
                 _prompt_enter_to_continue()
                 _clear_screen()
 
@@ -154,16 +154,16 @@ def main_menu():
                 continue
             else:
                 if config_choice:
-                    print("⚠️ Opção de configuração inválida.")
+                    print("⚠️ Invalid configuration option.")
                     _prompt_enter_to_continue()
                 _clear_screen()
 
         elif choice == "3":
-            print("\n👋 Saindo... Até logo!")
+            print("\n👋 Exiting... Goodbye!")
             break
         else:
             if choice:
-                print("⚠️ Opção inválida. Tente novamente.")
+                print("⚠️ Invalid option. Try again.")
                 _prompt_enter_to_continue()
             _clear_screen()
 
