@@ -1,0 +1,2 @@
+[console_scripts]
+ra-aid-start = ra_aid_start.__main__:main
